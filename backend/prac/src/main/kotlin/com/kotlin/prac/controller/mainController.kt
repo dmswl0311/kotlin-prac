@@ -1,5 +1,6 @@
 package com.kotlin.prac.controller
 
+import com.kotlin.prac.domain.dto.ArticleDto
 import com.kotlin.prac.domain.entity.Article
 import com.kotlin.prac.service.mainService
 import org.springframework.web.bind.annotation.GetMapping
@@ -19,7 +20,7 @@ class mainController(private val service:mainService) {
      * 전체 게시글 조회
      */
     @GetMapping("/all")
-    fun getAllArticles():List<Article>{
+    fun getAllArticles():List<ArticleDto>{
         return service.getAllArticles()
     }
 }
