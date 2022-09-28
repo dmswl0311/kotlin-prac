@@ -3,6 +3,7 @@ package com.kotlin.prac.controller
 import com.kotlin.prac.domain.dto.ArticleDto
 import com.kotlin.prac.service.mainService
 import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -18,8 +19,9 @@ class mainController(private val service:mainService) {
      * 전체 게시글 조회
      */
     @GetMapping("/all")
-    fun getAllArticles():List<ArticleDto>{
-        return service.getAllArticles()
+    fun getAllArticles():ResponseEntity<List<ArticleDto>>{
+        var res:List<ArticleDto> = service.getAllArticles()
+        return ResponseEntity.ok().body(res)
     }
 
     /**
@@ -32,7 +34,8 @@ class mainController(private val service:mainService) {
      * 애노테이션을 사용하기 때문에 조건에 따라 동적으로 변경 하기가 어렵다.
      */
     @GetMapping("/article/{id}")
-    fun getArticle(@PathVariable("id") articleId: Long): Any {
-        return service.getArticle(articleId)
+    fun getArticle(@PathVariable("id") articleId: Long): ResponseEntity<Any> {
+        var res:Any=service.getArticle(articleId)
+        return ResponseEntity.ok().body(res)
     }
 }
