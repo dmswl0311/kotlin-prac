@@ -3,7 +3,11 @@ package com.kotlin.prac.service
 import com.kotlin.prac.domain.dto.ArticleDto
 import com.kotlin.prac.domain.entity.Article
 import com.kotlin.prac.repository.mainRepo
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
+import org.springframework.web.server.ResponseStatusException
+import java.util.*
 
 @Service
 class mainService(private val repo:mainRepo) {
@@ -37,5 +41,22 @@ class mainService(private val repo:mainRepo) {
             res.add(temp)
         }
         return res
+    }
+
+    fun getArticle(articleId:Long) : Any {
+        var res: Optional<Article> =repo.findById(articleId)
+        if(res.isPresent) {
+            var article: Article = res.get()
+            return ArticleDto(article.id, article.title, article.contents, article.writer, article.date)
+        }
+        /**
+         * exception의 종류 두 가지
+         * 1. checked exception (컴파일 시점에서 예외 발생 / FileNotFoundException, ClassNotFoundException 등...)
+         * 2. unchecked exception(RuntimeException / NullPointerExcpetion,ArrayIndexOutOfBoundsException 등...) (컴파일 o)
+         *
+         * ResponseStatusException 은 @ResponseStatus 의 대체제로 Spring 5에 등장했다.
+         * RuntimeException을 상속하며 마찬가지로 HTTP Status 와 Message 를 설정할 수 있다.
+         */
+         throw ResponseStatusException(HttpStatus.BAD_REQUEST,"해당하는 게시글이 없습니다.",NullPointerException())
     }
 }
