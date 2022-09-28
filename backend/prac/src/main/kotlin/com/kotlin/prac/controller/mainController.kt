@@ -33,6 +33,15 @@ class mainController(private val service:mainService) {
      * @ResponseStatus 개발자가 정의한 Exception 이 발생하면 해당 Status 와 Message 를 전달한다.
      * 애노테이션을 사용하기 때문에 조건에 따라 동적으로 변경 하기가 어렵다.
      */
+
+    /**
+     * Any?
+     * 자바의 최상위 클래스가 Object라면, 코틀린은 Any이다.
+     * 단순힌 이름만 바뀐 것이 아니다. 코틀린에서도 Object를 사용할 수 있지만, 최상위 클래스는 아니다. Any는 Object의 슈퍼 클래스이다.
+     * 자바에서 기본형 타입(int,long)과 같은 값들을 Object에 대입하려면 참조형 타입으로 변환해야 한다. 하지만 코틀린의 Any는 int과 같은 타입을 클래스로 취급하기 때문에 그대로 대입할 수 있다.
+     * ! Any에 대입할 수 없는 값 == null --> Any는 Int?처럼 Nullable Type은 대입할 수 없다.
+     * 코틀린에는 모든 값을 저장할 수 있는 최상위 오브젝트로 Any?가 존재한다.
+     */
     @GetMapping("/article/{id}")
     fun getArticle(@PathVariable("id") articleId: Long): ResponseEntity<Any> {
         var res:Any=service.getArticle(articleId)
