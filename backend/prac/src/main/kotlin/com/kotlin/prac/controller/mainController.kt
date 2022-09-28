@@ -2,31 +2,34 @@ package com.kotlin.prac.controller
 
 import com.kotlin.prac.domain.dto.ArticleDto
 import com.kotlin.prac.service.mainService
+import io.swagger.annotations.Api
+import io.swagger.annotations.ApiOperation
+import io.swagger.annotations.ApiParam
+import io.swagger.annotations.ApiResponse
+import io.swagger.annotations.ApiResponses
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/rest")
+@CrossOrigin("*")
+@Api(tags=["게시판 REST API"])
 class mainController(private val service:mainService) {
 
+    // swagger http://localhost:8080/swagger-ui/
     @GetMapping("/test")
     fun test():String{
         return "test"
     }
 
-    /**
-     * 전체 게시글 조회
-     */
+    @ApiOperation("전체 게시글 조회")
+    @ApiResponse(code = 200, message = "성공입니다.")
     @GetMapping("/all")
     fun getAllArticles():ResponseEntity<List<ArticleDto>>{
         var res:List<ArticleDto> = service.getAllArticles()
         return ResponseEntity.ok().body(res)
     }
-
-    /**
-     * 게시글 상세 조회
-     */
 
     /**
      * @ResponseStatus(value=HttpStatus.BAD_REQUEST,code=HttpStatus.BAD_REQUEST, reason = "해당하는 게시글이 없습니다.")
@@ -42,8 +45,14 @@ class mainController(private val service:mainService) {
      * ! Any에 대입할 수 없는 값 == null --> Any는 Int?처럼 Nullable Type은 대입할 수 없다.
      * 코틀린에는 모든 값을 저장할 수 있는 최상위 오브젝트로 Any?가 존재한다.
      */
+    @ApiOperation("게시글 상세 조회")
+    // 가변 인자
+    @ApiResponses(
+        ApiResponse(code = 200, message = "성공입니다."),
+        ApiResponse(code = 400, message = "실패입니다."),
+    )
     @GetMapping("/article/{id}")
-    fun getArticle(@PathVariable("id") articleId: Long): ResponseEntity<Any> {
+    fun getArticle(@ApiParam(value="게시글 아이디") @PathVariable("id") articleId: Long): ResponseEntity<Any> {
         var res:Any=service.getArticle(articleId)
         return ResponseEntity.ok().body(res)
     }
